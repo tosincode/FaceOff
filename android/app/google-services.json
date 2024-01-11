@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "789038262581",
+    "project_id": "iside-9d7c1",
+    "storage_bucket": "iside-9d7c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:789038262581:android:5a2254dbacdbad6aa4047c",
+        "android_client_info": {
+          "package_name": "com.iside"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3mcwYnT4HGMPBU_tIKacsZrNG6xhZGik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
