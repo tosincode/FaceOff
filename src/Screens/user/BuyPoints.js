@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, FlatList, Platform, Alert } from 'react-native';
-import RNIap, { InAppPurchase, PurchaseError, SubscriptionPurchase, acknowledgePurchaseAndroid, consumePurchaseAndroid, finishTransaction, finishTransactionIOS, purchaseErrorListener, purchaseUpdatedListener, } from 'react-native-iap';
+// import RNIap, { InAppPurchase, PurchaseError, SubscriptionPurchase, acknowledgePurchaseAndroid, consumePurchaseAndroid, finishTransaction, finishTransactionIOS, purchaseErrorListener, purchaseUpdatedListener, } from 'react-native-iap';
 import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import AsyncStorage from "@react-native-community/async-storage";
 import moment from 'moment';

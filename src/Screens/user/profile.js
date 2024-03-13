@@ -318,9 +318,9 @@ export default function profile({ route, navigation }) {
                     <View style={{alignItems:'center'}}>
                         <BoldText>{userContext.profile.points}</BoldText>
                         <RegularText style={{color:'gray'}}>Points</RegularText>
-                        <TouchableOpacity onPress={()=> navigation.navigate('buyPoints')} style={{alignItems:'center', backgroundColor:Constants.btnColor, width:80, borderRadius:5,marginTop:5 }}>
+                        {/* <TouchableOpacity onPress={()=> navigation.navigate('buyPoints')} style={{alignItems:'center', backgroundColor:Constants.btnColor, width:80, borderRadius:5,marginTop:5 }}>
                             <RegularText style={{color:'white'}}>Buy Points</RegularText>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <TouchableOpacity onPress={()=> navigation.navigate('followers',{forData:'follower'})} style={{alignItems:'center', borderRightWidth:1, borderLeftWidth:1, paddingHorizontal:15, borderRightColor:'#ddd', borderLeftColor:'#ddd'}}>
                         <BoldText>{(follower)?follower:0}</BoldText>

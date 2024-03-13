@@ -182,7 +182,7 @@ export default function Feeds({ route, navigation }) {
     };
 
     useEffect(() => {
-     console.log("change data",feedData, "hey")
+    // console.log("change data",feedData, "hey")
         if (feedData && feedData.votingFeeds) {
             setFeedData(feedData.votingFeeds)
         }
@@ -193,7 +193,7 @@ export default function Feeds({ route, navigation }) {
 
 
     const setFeedData = (data) => {
-         console.log(data, "feed data again")
+        // console.log(data, "feed data again")
         setFeedArray(data)
         setInitialFeeds(data)
         // sortFeeds(data)

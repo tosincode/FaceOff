@@ -13,6 +13,10 @@ import { Provider } from 'react-redux'
 import configureStore from './store/ConfigureStore';
 import FlashMessage, {showMessage} from 'react-native-flash-message';
 import { ThemeProvider } from './src/utils/screenModes/ThemeContext';
+import notifee from '@notifee/react-native';
+
+
+
 // import {
 //   SafeAreaView,
 
@@ -22,7 +26,7 @@ import { ThemeProvider } from './src/utils/screenModes/ThemeContext';
 //   View,
 // } from 'react-native';
 
-import { StyleSheet, Text, View, SafeAreaView, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, Alert } from 'react-native';
 
 import Routes from './Router';
 import {
@@ -67,6 +71,41 @@ export default function App(props) {
 
   useEffect(() => {
     requestUserPermission();
+}, []);
+
+
+
+useEffect(async () =>{
+  const channelId = await notifee.createChannel({
+    id: 'faceOff',
+    name: 'Default Channel',
+  });
+ // console.log("channelId==>", channelId)
+},[])
+
+function onMessageReceived(message) {
+ notifee.displayNotification({
+  title: message.notification.title,
+  body: message.notification.body,
+  android: {
+    channelId:"faceOff"
+  
+  },
+});
+}
+
+  
+useEffect(() => {
+  console.log('FCM here =>');
+
+  const unsubscribe = messaging().onMessage(async remoteMessage => {
+    Alert.alert("alert came in")
+      onMessageReceived(remoteMessage)
+  });
+
+  return () => {
+    unsubscribe();
+  };
 }, []);
 
 

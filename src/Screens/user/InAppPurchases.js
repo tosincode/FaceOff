@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { View, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, Text } from 'react-native';
-import IAP from 'react-native-iap';
+// import IAP from 'react-native-iap';
 import Header from '../../Components/Header';
 import { RegularText, BoldText, SemiBoldText } from "../../Components/styledTexts";
 import { darkTheme, lightTheme } from '../../utils/screenModes/theme';
