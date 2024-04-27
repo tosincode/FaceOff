@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { View, StyleSheet, ScrollView, Image, TouchableOpacity, TextInput, Dimensions, Text, ImageBackground, FlatList } from 'react-native';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { View, StyleSheet, ScrollView, Image, TouchableOpacity, TextInput, Dimensions, Text, ImageBackground, FlatList, Platform } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import { useMutation, useQuery } from "@apollo/react-hooks";
 import { gql } from 'apollo-boost';
@@ -20,6 +20,10 @@ import { CREATE_TOPIC } from "../../utils/Mutations";
 import { UserContext } from '../../../App';
 import { ThemeContext } from '../../utils/screenModes/ThemeContext';
 import { darkTheme, lightTheme } from '../../utils/screenModes/theme';
+import DocumentPicker from 'react-native-document-picker';
+import Video from 'react-native-video';
+import { getVideoDuration } from 'react-native-video-duration';
+
 
 export default function CreateTopic({ route, navigation }) {
     const userContext = useContext(UserContext)
@@ -39,20 +43,72 @@ export default function CreateTopic({ route, navigation }) {
     const [showUserList, setShowUserList] = useState(false)
     const { theme, toggleTheme } = useContext(ThemeContext);
     const screenModeStyles = theme === 'light' ? lightTheme : darkTheme;
+    const videoRef = useRef(null);
+
 
     const { data: categoryData, loading: categoryLoading, error: categoryError } = useQuery(GET_CATEGORY, { fetchPolicy: 'cache-and-network' });
     const { data: userData, loading: userLoading, error: userError } = useQuery(GET_USER_LIST, { fetchPolicy: 'cache-and-network' });
 
 
+
+
+const uploadVideo = async () => {
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.video],
+      });
+      
+      // Check if there is at least one item in the array and if its type is video
+      if (res.length > 0 && res[0].type && res[0].type.includes('video')) {
+        const fileInfo = await RNFS.stat(res[0].uri);
+        const fileSizeInBytes = fileInfo.size;
+        const fileSizeInMb = fileSizeInBytes / (1024 * 1024); // Convert file size to MB
+        const durationInSeconds = await getVideoDuration(res[0].uri);
+
+       console.log("durationInSeconds", durationInSeconds)
+
+        if (durationInSeconds <= 20 ) {
+            console.log("res[0].uri", res[0].uri)
+            setVideoUrl(res[0].uri);
+            setLoadingActivity(true);
+            getBase64ForUoplad(res[0].uri);
+        } else {
+          // Display an error message if the video exceeds the size or duration limit
+          Toast.showWithGravity(
+            'Video duration or size cannot exceed 20 seconds',
+            Toast.LONG,
+            Toast.BOTTOM
+          );
+        }
+      } else {
+        // Display an error message if no file is selected or if the selected file is not a video
+        Toast.showWithGravity('Please select a valid video file', Toast.LONG, Toast.BOTTOM);
+      }
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker
+        return;
+      }
+      // Handle other errors
+      console.error(err);
+    }
+  };
+  
+
+
+  
+ 
     useEffect(() => {
         if (route.params) {
             if (route.params.videoURI) {
+                console.log("check")
                 setVideoUrl(route.params.videoURI);
                 setLoadingActivity(true);
                 getBase64(route.params.videoURI)
             }
         }
     }, [route.params]);
+
 
     useEffect(() => {
 
@@ -64,7 +120,7 @@ export default function CreateTopic({ route, navigation }) {
 
 
     useEffect(() => {
-       console.log("thumbnailImage", videoUrl)
+       console.log("thumbnailImage ==>" , videoUrl)
     }, [thumbnailImage]);
 
     const setCategoryData = data => {
@@ -83,7 +139,7 @@ export default function CreateTopic({ route, navigation }) {
 
     useEffect(() => {
 
-        console.lo
+    
 
         if (userData && userData.usersList) {
             modifyUserArray(userData.usersList)
@@ -128,10 +184,38 @@ export default function CreateTopic({ route, navigation }) {
         setShowUserList(false)
 
     }
+
+    const getBase64ForUoplad = async (videoUri) => {
+        try {
+          console.log("videoUri ==>", videoUri);
+          const videoUriBase64 = await RNFS.readFile(videoUri, 'base64');
+      
+          console.log("videoUriBase64", videoUriBase64);
+      
+          createThumbnail({
+            url: videoUri,
+            timeStamp: 10000,
+          })
+          .then(response => setThumbnail(response.path))
+          .catch(err => console.log({ err }));
+      
+          setVideo(`data:video/mp4;base64,${videoUriBase64}`);
+          setLoadingActivity(false);
+        } catch (error) {
+          console.error("Error converting video to base64:", error);
+          setLoadingActivity(false);
+        }
+      }
+      
+
+
     const getBase64 = async (videoUri) => {
+        console.log("videoUri ==>", videoUri)
 
         const filepath = videoUri.split('//')[1];
         const videoUriBase64 = await RNFS.readFile(filepath, 'base64');
+
+        console.log("filepath", filepath )
 
         createThumbnail({
             url: videoUri,
@@ -140,10 +224,12 @@ export default function CreateTopic({ route, navigation }) {
             .then(response => setThumbnail(response.path))
             .catch(err => console.log({ err }));
         setVideo(`data:video/mp4;base64,${videoUriBase64}`);
+      //  console.log("videoUriBase64",videoUriBase64)
         setLoadingActivity(false);
     }
 
     const create_topics = async () => {
+        console.log("video",)
         if (claim === null || claim === "") {
             Toast.showWithGravity('Please enter claim topic', Toast.LONG, Toast.BOTTOM);
         } else if (category === null || category === "") {
@@ -312,8 +398,9 @@ export default function CreateTopic({ route, navigation }) {
                         </View>
                     }
                     {/* <Text style={[styles.textStyle]}>Create Video</Text> */}
-                    <View style={{ alignSelf: 'flex-start' }}>
+                    <View style={{ justifyContent:"space-between", flexDirection:"row"}}>
                     <TouchableOpacity 
+                    onPress={() => { navigation.navigate('recordVideo', { from: 'createVideo' }) }}
                      style={{
                         flexDirection: 'row', 
                         alignItems: 'center', 
@@ -322,9 +409,27 @@ export default function CreateTopic({ route, navigation }) {
                         borderRadius: 15, 
                         paddingVertical: 10, // Adjust as needed for padding top and bottom
                         paddingHorizontal: 15  // Adjust as needed for padding left and right
+                        
                       }} >
                         <Image source={require('../../assets/Icons/video.png')} style={{ width: 30, height: 30, resizeMode: 'contain', tintColor:'white' }} />
-                        <SemiBoldText style={{color:'white', fontSize:16, paddingLeft:5}}>Create Video</SemiBoldText>
+                        <SemiBoldText style={{color:'white', fontSize:16, paddingLeft:5}}>Create Video </SemiBoldText>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                    onPress={() => uploadVideo()}
+                     style={{
+                        flexDirection: 'row', 
+                        alignItems: 'center', 
+                        backgroundColor: "white", 
+                        borderColor: Constants.btnColor,
+                        marginTop: 15, 
+                        borderWidth:1,
+                        borderRadius: 15, 
+                        paddingVertical: 10, // Adjust as needed for padding top and bottom
+                        paddingHorizontal: 15  // Adjust as needed for padding left and right
+                        
+                      }} >
+                        <Image source={require('../../assets/Icons/video.png')} style={{ width: 30, height: 30, resizeMode: 'contain', tintColor:'white' }} />
+                        <SemiBoldText style={{color:Constants.btnColor, fontSize:16, paddingLeft:5}}>Upload Video </SemiBoldText>
                     </TouchableOpacity>
                     </View>
                        {

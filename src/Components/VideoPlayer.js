@@ -16,7 +16,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons'; // Make sure to inst
 export default function Videos({ show, onHide, url, thumbnail,videoType, topic_id, page, pageSize, claim, feedType, isCategory  }) {
 
   const [feeds, { data: feedData, loading: feedLoading, error: feedError }] = useLazyQuery(FEEDS_AOI, { fetchPolicy: 'network-only' });
-console.log("url==>", url)
 
 const [paused, setPaused] = useState(false);
 const [hasStarted, setHasStarted] = useState(false);

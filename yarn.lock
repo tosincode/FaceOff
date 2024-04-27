@@ -6376,6 +6376,13 @@ react-native-device-info@^7.2.1:
   resolved "https://registry.npmjs.org/react-native-device-info/-/react-native-device-info-7.4.0.tgz"
   integrity sha512-n5mrUuwUcPXAspLZcAOE+Q087yq+Gfvo8+soZIg1l7rUZUrLNWlFxFgOo/DMPNZA5vcBSv1TSGFFdiAZVHalLw==
 
+react-native-document-picker@^9.1.2:
+  version "9.1.2"
+  resolved "https://registry.npmjs.org/react-native-document-picker/-/react-native-document-picker-9.1.2.tgz"
+  integrity sha512-7ll4tIH2qiz6a+NIAvQRbPQCznDd+AstDjhW2BevKjz3WCYQuOIcQRPR8X5vbkJ+pFc2ZAak6y2wSCvTJ4BYLQ==
+  dependencies:
+    invariant "^2.2.4"
+
 react-native-fast-image@^8.3.4:
   version "8.6.3"
   resolved "https://registry.npmjs.org/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz"
@@ -6417,6 +6424,11 @@ react-native-image-crop-picker@^0.38.0:
   version "0.38.0"
   resolved "https://registry.npmjs.org/react-native-image-crop-picker/-/react-native-image-crop-picker-0.38.0.tgz"
   integrity sha512-FaLASXOP7R23pi20vMiVlXl0Y7cwTdl7y7yBqrlrsSH9gl9ibsU5y4mYWPYRbe8x9F/3zPGUE+1F0Gj/QF/peg==
+
+react-native-image-picker@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-3.2.0.tgz"
+  integrity sha512-OchxzRI7+v+jQQNAFk9GZpfi7Tx77CDXomnzjdGeEOnxw9e9F0qB7SnjzEm6vDdsgpGeWYtqsXthdeNsWrgnnw==
 
 react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.3.0:
   version "1.3.1"
@@ -6534,6 +6546,11 @@ react-native-video-controls@^2.6.0:
   integrity sha512-dBmrE3TAKaR1gYMfbukjAM6Xo8OMZyRrxPzZtnaUgWcvGo11PQwzaI/j8HPD5fLgO+rlweP2pDpEJyIBsJvJkw==
   dependencies:
     lodash "^4.16.4"
+
+react-native-video-duration@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/react-native-video-duration/-/react-native-video-duration-0.1.2.tgz"
+  integrity sha512-+RYfUrnJ/h0k2b/4m2leJXfLQAtfEHSRRpcpTAgELviucz2olh+aXGHhUuPx1cPLC/v84N6+PYVACEE/I4ojSA==
 
 react-native-video-player@^0.10.1:
   version "0.10.1"

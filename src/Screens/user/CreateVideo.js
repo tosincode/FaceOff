@@ -128,6 +128,7 @@ const CameraScreen = ({ navigation, from }) => {
       });
   
       promise.then((data) => {
+        console.log("data.uri", data.uri)
         setVideoURI(data.uri);
         setVideoUrl(data.uri);
         setIsRecording(false);
@@ -272,19 +273,6 @@ const CameraScreen = ({ navigation, from }) => {
       // ErrorHandler.showError(error);
     },
   });
-
-  // Render Recording Button
-  // const RenderRecording = () => {
-  //   const action = isRecording ? stopVideo : takeVideo;
-  //   const buttonImage = isRecording
-  //     ? require('../../assets/Icons/stop.png')
-  //     : require('../../assets/Icons/record.png');
-  //   return (
-  //     <TouchableOpacity onPress={action}>
-  //       <Image source={buttonImage} style={{ width: 70, height: 70 }} />
-  //     </TouchableOpacity>
-  //   );
-  // };
 
 
   const RenderRecording = () => {
