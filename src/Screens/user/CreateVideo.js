@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import React , {useContext, useEffect, useRef, useState}from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, Dimensions, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, Dimensions, Image, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
 
 import CountDown from 'react-native-countdown-component';
 import { RNCamera } from 'react-native-camera';
@@ -18,8 +18,9 @@ import VideoPlayer from '../../Components/VideoPlayer'
 import { AGAINST_MUTATION, RECAPTURE_VIDEO} from "../../utils/Mutations";
 import { ThemeContext } from '../../utils/screenModes/ThemeContext';
 import { darkTheme, lightTheme } from '../../utils/screenModes/theme';
-
-
+import { createThumbnail } from "react-native-create-thumbnail";
+import DocumentPicker from 'react-native-document-picker';
+import { getVideoDuration } from 'react-native-video-duration';
 const flashModeOrder = {
   off: 'on',
   on: 'auto',
@@ -50,6 +51,11 @@ const CameraScreen = ({ navigation, from }) => {
   const [postButtonText, setPostButtonText] = useState("Post") 
   const [buttonAbility, setButtonAbility] = useState(false)
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const [thumbnailImage, setThumbnail] = useState("");
+  const [isUploaded, setIsUpLoaded] =  useState(false)
+
+  const [isUploadedLoded, setIsUpLoadedLoaded] =  useState(false)
+
   const screenModeStyles = theme === 'light' ? lightTheme : darkTheme;
   const cameraRef = useRef(null);
 
@@ -184,20 +190,33 @@ const CameraScreen = ({ navigation, from }) => {
   setButtonAbility(true)
     if(route.params.from=="feeds" || route.params.from == "notificationFeed"){
       setLoadingActivity(true);
-      const filepath = videoUrl.split('//')[1];
-      const videoUriBase64 = await RNFS.readFile(filepath, 'base64');
-      const video = `data:video/mp4;base64,${videoUriBase64}`;
-      againstVideo({variables:{
-        againstVideoInput:{
-          topic_id:Number(route.params.topic_id),
-          video:video
-        }
-      }})
+      console.log("videoUrl noow", videoUrl)
+      if(isUploaded){
+            console.log("got it here")
+          const video = `data:video/mp4;base64,${videoUrl}`;
+          againstVideo({variables:{
+            againstVideoInput:{
+              topic_id:Number(route.params.topic_id),
+              video:video
+            }
+          }})
+      }else{
+        const filepath = videoUrl.split('//')[1];
+        const videoUriBase64 = await RNFS.readFile(filepath, 'base64');
+        const video = `data:video/mp4;base64,${videoUriBase64}`;
+        againstVideo({variables:{
+          againstVideoInput:{
+            topic_id:Number(route.params.topic_id),
+            video:video
+          }
+        }})
+      }
       
       
     } else if(route.params.from=="archives"){
       setLoadingActivity(true);
       const filepath = videoUrl.split('//')[1];
+
       const videoUriBase64 = await RNFS.readFile(filepath, 'base64');
       const video = `data:video/mp4;base64,${videoUriBase64}`;
       recaptureVideo({variables:{
@@ -275,6 +294,92 @@ const CameraScreen = ({ navigation, from }) => {
   });
 
 
+  const uploadFromPhoneVideo = async () => {
+    setIsUpLoaded(true)
+    setIsUpLoadedLoaded(true)
+    try {
+      const res = await DocumentPicker.pick({
+        type: [DocumentPicker.types.video],
+      });
+      
+      // Check if there is at least one item in the array and if its type is video
+      if (res.length > 0 && res[0].type && res[0].type.includes('video')) {
+        const fileInfo = await RNFS.stat(res[0].uri);
+        const fileSizeInBytes = fileInfo.size;
+        const fileSizeInMb = fileSizeInBytes / (1024 * 1024); // Convert file size to MB
+        const durationInSeconds = await getVideoDuration(res[0].uri);
+
+       console.log("durationInSeconds", durationInSeconds)
+
+        if (durationInSeconds <= 20 ) {
+            console.log("res[0].uri", res[0].uri)
+            // setVideoUrl(res[0].uri)
+            // setShow(true)
+
+           getBase64ForUoplad(res[0].uri);
+         
+        } else {
+          setIsUpLoaded(false)
+          setIsUpLoadedLoaded(false)
+          // Display an error message if the video exceeds the size or duration limit
+          Toast.showWithGravity(
+            'Video duration or size cannot exceed 20 seconds',
+            Toast.LONG,
+            Toast.BOTTOM
+          );
+        }
+      } else {
+        // Display an error message if no file is selected or if the selected file is not a video
+        Toast.showWithGravity('Please select a valid video file', Toast.LONG, Toast.BOTTOM);
+      }
+    } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker
+        setIsUpLoadedLoaded(false)
+        setIsUpLoaded(false)
+        return;
+      }
+     
+      // Handle other errors
+      console.error(err);
+    }
+  };
+
+
+  const getBase64ForUoplad = async (getvideoUri) => {
+    try {
+      console.log("videoUri ==>", getvideoUri);
+      const videoUriBase64 = await RNFS.readFile(getvideoUri, 'base64');
+  
+      console.log("videoUriBase64", videoUriBase64);
+  
+      createThumbnail({
+        url: getvideoUri,
+        timeStamp: 10000,
+      })
+      .then(response => setThumbnail(response.path))
+      .catch(err => console.log({ err }));
+      setVideoURI(getvideoUri);
+      setVideoUrl(getvideoUri);
+      setIsRecording(false);
+      setShowpreview(true)
+    // setVideoUrl(`data:video/mp4;base64,${videoUriBase64}`);
+ 
+    setIsUpLoadedLoaded(false);
+    } catch (error) {
+      console.error("Error converting video to base64:", error);
+      setIsUpLoadedLoaded(false);
+    }
+  }
+
+const closeUploadedVideo = () =>{
+  setVideoUrl("") 
+  setIsUpLoaded(false);
+  setShowpreview(false)
+}
+  
+
+
   const RenderRecording = () => {
     
    
@@ -321,51 +426,90 @@ const CameraScreen = ({ navigation, from }) => {
       <View style={[styles.header, {backgroundColor:screenModeStyles.backgroundColor}]}>
         <Header title="Create video" back={() => navigation.goBack()} />
       </View>
-      <SemiBoldText style={{ margin: 20 }}>Video will record here</SemiBoldText>
+      <SemiBoldText style={{ margin: 20 }}>Video recorded here</SemiBoldText>
+    
       <ScrollView contentContainerStyle={{ flex: 1, backgroundColor: screenModeStyles.backgroundColor }} bounces={false}>
-             
-        <View style={{ flex: 1}}>
-          <RNCamera
-             ref={cameraRef}
-            
-            style={{
-              flex:1,
-              width: Dimensions.get('window').width*.95,
-              // height: Dimensions.get('window').height*.8,
-              justifyContent: 'space-between',
-              margin:10,
-            }}
-            type={type}
-            flashMode={flash}
-            captureAudio={true}
-            
-            androidCameraPermissionOptions={{
-              title: 'Permission to use camera',
-              message: 'We need your permission to use your camera',
-              buttonPositive: 'Ok',
-              buttonNegative: 'Cancel',
-            }}
+          
 
-            androidRecordAudioPermissionOptions={{
-              title: 'Permission to use audio recording',
-              message: 'We need your permission to use your audio',
-              buttonPositive: 'Ok',
-              buttonNegative: 'Cancel',
-            }}
-          >
-            <View style={{ flex: 1 }} />
+          
+                
+                  {
+                        isUploaded && videoUrl !== "" &&
+                        <View style={{ flex: 1}}>
+                         <ImageBackground source={{ uri: thumbnailImage }} resizeMode={"cover"} style={{  height: 250, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+                             <TouchableOpacity onPress={() => { setShow(true); }} >
+                                 {/* <Image  style={{ flex:1, height: 250, resizeMode: 'contain' }} /> */}
+                                 <Image source={require('../../assets/Icons/play-icon.png')} style={{ width: 50, height: 50, resizeMode: 'contain' }} />
+                             </TouchableOpacity>
+                             <TouchableOpacity onPress={() => closeUploadedVideo()} style={{ position: 'absolute', top: 4, right: 10 }}>
+                                 <Image
+                                     source={require('../../assets/Icons/close.png')}
+                                 // 
+                                 />
+                             </TouchableOpacity>
+                           
+                         </ImageBackground>
+                         </View>
 
-              <View
-                style={{
-                  height: 70,
-                  marginBottom:5
-                }}
-              >
-                <RenderRecording />
+                         }
+
+          {
+              isUploadedLoded &&
+              <View style={{flex:1,flexDirection:"row", justifyContent:"center", alignItems:"center"}}>
+                   <ActivityIndicator  />
               </View>
-          </RNCamera>
+           }
+         
 
-        </View>
+
+           {
+             !isUploaded && 
+             <View style={{ flex: 1, alignItems:"center"}}>
+             <RNCamera
+                ref={cameraRef}
+               
+               style={{
+                flex:1,
+                 aspectRatio: 140/165,
+                 width: Dimensions.get('window').width*.95,
+                 height: Dimensions.get('window').height*95,
+                 justifyContent: 'space-between',
+
+                 margin:10,
+               }}
+               type={type}
+               flashMode={flash}
+               captureAudio={true}
+               
+               androidCameraPermissionOptions={{
+                 title: 'Permission to use camera',
+                 message: 'We need your permission to use your camera',
+                 buttonPositive: 'Ok',
+                 buttonNegative: 'Cancel',
+               }}
+   
+               androidRecordAudioPermissionOptions={{
+                 title: 'Permission to use audio recording',
+                 message: 'We need your permission to use your audio',
+                 buttonPositive: 'Ok',
+                 buttonNegative: 'Cancel',
+               }}
+             >
+               <View style={{ flex: 1 }} />
+   
+                 <View
+                   style={{
+                     height: 70,
+                     marginBottom:5
+                   }}
+                 >
+                   <RenderRecording />
+                 </View>
+             </RNCamera>
+   
+           </View>
+           }
+      
 
       </ScrollView>
       <View style={{ marginVertical:60}}>
@@ -405,6 +549,36 @@ const CameraScreen = ({ navigation, from }) => {
           <Button  buttondisable={buttonAbility} title={postButtonText} onPress={()=>{submitVideo()}} style={{ alignSelf: 'center', width: Dimensions.get('window').width * .27, borderRadius: 2, minHeight: 50, marginLeft:15 }} />
         </View>
       }
+
+         
+     
+
+               {
+                 !showPreview && route.params.from=="feeds"  && 
+                <View>
+                <SemiBoldText style={{ margin: 10, marginLeft:20 }}>Or Upload  recorded Video here</SemiBoldText>
+                 <TouchableOpacity 
+                         onPress={() => uploadFromPhoneVideo()}
+                          style={{
+                             flexDirection: 'row', 
+                             alignItems: 'center', 
+                             backgroundColor: Constants.btnColor, 
+                             // marginTop: 15, 
+                             borderRadius: 15, 
+                             paddingVertical: 10, // Adjust as needed for padding top and bottom
+                             paddingHorizontal: 15,  
+                             marginHorizontal:20
+                             
+                           }} >
+                             <Image source={require('../../assets/Icons/video.png')} style={{ width: 30, height: 30, resizeMode: 'contain', tintColor:'white' }} />
+                             <SemiBoldText style={{color:'white', fontSize:16, paddingLeft:5}}>Upload Video </SemiBoldText>
+                  </TouchableOpacity>
+                </View>
+     
+
+             }
+            
+
       <VideoPlayer show={show} onHide={onHide} url={videoUrl} />
     </View>
     </View>

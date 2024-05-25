@@ -68,9 +68,33 @@ export default function App(props) {
     }
   }
 
+  const requestNotificationPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_NOTIFICATION_POLICY,
+        {
+          title: 'Notification Permission',
+          message: 'Please enable notifications to receive important notification.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Notification permission granted');
+        // Continue with sending notifications
+      } else {
+        console.log('Notification permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
 
   useEffect(() => {
     requestUserPermission();
+    requestNotificationPermission()
 }, []);
 
 
@@ -78,12 +102,14 @@ export default function App(props) {
 useEffect(async () =>{
   const channelId = await notifee.createChannel({
     id: 'faceOff',
-    name: 'Default Channel',
+    name: 'faceOff',
   });
  // console.log("channelId==>", channelId)
 },[])
 
 function onMessageReceived(message) {
+
+
  notifee.displayNotification({
   title: message.notification.title,
   body: message.notification.body,
@@ -99,7 +125,8 @@ useEffect(() => {
   console.log('FCM here =>');
 
   const unsubscribe = messaging().onMessage(async remoteMessage => {
-    Alert.alert("alert came in")
+   // Alert.alert("alert came in")
+    console.log("push")
       onMessageReceived(remoteMessage)
   });
 
@@ -107,6 +134,23 @@ useEffect(() => {
     unsubscribe();
   };
 }, []);
+
+  
+useEffect(() => {
+  console.log('FCM here =>');
+
+  const unsubscribe = messaging().setBackgroundMessageHandler(async remoteMessage => {
+   // Alert.alert("alert came in")
+    console.log("push")
+      onMessageReceived(remoteMessage)
+  });
+
+  return () => {
+    unsubscribe();
+  };
+}, []);
+
+
 
 
 //   useEffect(() => {
