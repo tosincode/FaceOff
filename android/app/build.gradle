@@ -74,12 +74,12 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.iside"
+    namespace "com.faceOff"
     defaultConfig {
-        applicationId "com.iside"
+        applicationId "com.faceOff"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
+        versionCode 12
         versionName "1.0"
         missingDimensionStrategy 'react-native-camera', 'general'
 

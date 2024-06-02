@@ -182,7 +182,7 @@ export default function Feeds({ route, navigation }) {
     };
 
     useEffect(() => {
-    // console.log("change data",feedData, "hey")
+    //console.log("change data",feedData)
         if (feedData && feedData.votingFeeds) {
             setFeedData(feedData.votingFeeds)
         }

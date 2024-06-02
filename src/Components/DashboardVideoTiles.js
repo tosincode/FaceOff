@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, TouchableOpacity, Image, Dimensions, } from 'react-native';
+import { View, TouchableOpacity, Image, Dimensions,StyleSheet } from 'react-native';
 import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu';
 import CountDown from 'react-native-countdown-component';
 import { BoldText, RegularMenuText, RegularText, SemiBoldText } from './styledTexts';
@@ -14,6 +14,23 @@ import { ThemeContext } from '../utils/screenModes/ThemeContext';
 let userId = '';
 export default function VideoTile({ item, commentPress, onPress, firstItem, votePressFavour, votePressAgainst, report, claimPress, userProfilePress, againstUserProfilePress, page, pageSize, claim, feedType, isCategory }) {
 
+  
+
+//    const favourPercentage = item.totalVotes ? Math.round((item.totalFavourVotes / item.totalVotes) * 100) : 0;
+//    const againstPercentage = item.totalVotes ?  Math.round((item.totalAgainstVotes / item.totalVotes) * 100) : 0;
+  
+//    const favourPercentage = item.totalVotes ? Math.round((item.totalFavourVotes / item.totalVotes) * 100) : 0;
+//    const againstPercentage = item.totalVotes ? Math.round((item.totalAgainstVotes / item.totalVotes) * 100) : 0;
+
+   const totalFavourVotes = Number(item.totalFavourVotes) || 0;
+   const totalAgainstVotes = Number(item.totalAgainstVotes) || 0;
+   const totalVotes = Number(item.totalVotes) || 0;
+ 
+   const favourPercentage = totalVotes ? Math.round((totalFavourVotes / totalVotes) * 100) : 0;
+   const againstPercentage = totalVotes ? Math.round((totalAgainstVotes / totalVotes) * 100) : 0;
+
+
+   //console.log("feeds item",item )
 
     const { theme, toggleTheme } = useContext(ThemeContext);
 
@@ -211,6 +228,51 @@ export default function VideoTile({ item, commentPress, onPress, firstItem, vote
                 </TouchableOpacity>
             }
         </View>
+         {/* <View style={{flexDirection:"row", alignItems:"center", justifyContent:"space-evenly"}}>
+         <RegularText style={{ fontSize: 12, }}>{againstPercentage} %</RegularText>
+         <View></View>
+         <RegularText style={{ fontSize: 12}}>{favourPercentage} %</RegularText>
+         </View> */}
+         {
+            item.voting_type != "" &&  item.voting_type != null &&
+                        <View style={styles.voteContainer}>
+                    <RegularText style={styles.votes}>{favourPercentage} %</RegularText>
+                    <View style={styles.percentageBarContainer}>
+                    <View style={[styles.percentageBar, { backgroundColor: '#fdac41', width: `${favourPercentage}%` }]} />
+                    <View style={[styles.percentageBar, { backgroundColor: '#2a6b9c', width: `${ againstPercentage}%` }]} />
+                    </View>
+                    <RegularText style={styles.votes}>{ againstPercentage} %</RegularText>
+                </View>
+         }
+         
         <VideoPlayer show={show} onHide={onHide} url={videoUrl} thumbnail={thumbnail} videoType={videoType} topic_id={item.id} page={page} pageSize={pageSize} claim={claim} feedType={feedType} isCategory={isCategory} />
     </View>
 }
+
+
+const styles = StyleSheet.create({
+
+    percentageBarContainer: {
+        flexDirection: 'row',
+        height: 20,
+        flex: 1,
+        marginHorizontal: 10,
+        backgroundColor: '#f0f0f0',
+        borderRadius: 5,
+        overflow: 'hidden',
+      },
+      percentageBar: {
+        height: '100%',
+      },
+      video: {
+        width: '100%',
+        height: 200,
+        marginVertical: 10,
+      },
+      voteContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        marginVertical: 10,
+      },
+    });

@@ -1,4 +1,4 @@
-package com.iside;
+package com.faceOff;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

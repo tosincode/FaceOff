@@ -1,4 +1,4 @@
-package com.iside;
+package com.faceOff;
 
 import android.app.Application;
 import com.facebook.react.PackageList;
