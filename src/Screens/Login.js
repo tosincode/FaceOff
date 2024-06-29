@@ -34,7 +34,7 @@ import { darkTheme, lightTheme } from '../utils/screenModes/theme';
 
 function Login({ navigation }) {
   const [selectedCountryCode, setSelectedCountryCode] = useState('+1'); // Set a default country code
-console.log()
+
   const userContext = React.useContext(UserContext);
 
   const { height, width } = Dimensions.get("screen");
@@ -90,25 +90,7 @@ console.log()
     },
   });
 
-  // useEffect(() => {
-  //   const keyboardDidShowListener = Keyboard.addListener(
-  //     'keyboardDidShow',
-  //     () => {
-  //       setKeyboardVisible(true); // or some other action
-  //     }
-  //   );
-  //   const keyboardDidHideListener = Keyboard.addListener(
-  //     'keyboardDidHide',
-  //     () => {
-  //       setKeyboardVisible(false); // or some other action
-  //     }
-  //   );
 
-  //   return () => {
-  //     keyboardDidHideListener.remove();
-  //     keyboardDidShowListener.remove();
-  //   };
-  // }, []);
 
   return (
     <View style={[Styles.Container, {backgroundColor:screenModeStyles.backgroundColor}]}>

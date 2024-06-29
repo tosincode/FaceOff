@@ -133,7 +133,7 @@ export default function UserProfile({ route, navigation }) {
                         </View>
                         <View style={{ flex: 1, paddingLeft: 20,}}>
                             <RegularText>{userProfileData.first_name} {userProfileData.last_name}</RegularText>
-                            <RegularText>Age: {userProfileData.age}</RegularText>
+                            {/* <RegularText>Age: {userProfileData.age}</RegularText> */}
                             <RegularText style={{  }}>Location: {userProfileData.city}, {stateList[userProfileData.state]}</RegularText>
                             <Button 
                                 title="Block"

@@ -14,7 +14,7 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import ImagePicker from 'react-native-image-crop-picker';
-import DateTimePickerModal from 'react-native-modal-datetime-picker'
+// import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import moment from 'moment';
 import { TextInputMask } from 'react-native-masked-text';
 import Toast from 'react-native-simple-toast';
@@ -44,7 +44,7 @@ export default function Profile({ navigation, route }) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState("Jun 03, 2000");
   const [showDatePicker, setDatePicker] = useState(false)
   const [nameInitials, setNameInitials] = useState('');
   const [city, setCity] = useState('');
@@ -95,12 +95,20 @@ export default function Profile({ navigation, route }) {
         setState(userContext.profile.state)
         let initial = userContext.profile.first_name.charAt(0).toUpperCase() +" "+ userContext.profile.last_name.charAt(0).toUpperCase();
         setNameInitials(initial)
+        console.log("initial here", initial)
       } 
     });
 
     // Return the function to unsubscribe from the event so it gets removed on unmount
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    const firstInitial = firstName ? firstName.charAt(0).toUpperCase() : '';
+    const lastInitial = lastName ? lastName.charAt(0).toUpperCase() : '';
+
+    setNameInitials(firstInitial + lastInitial);
+  }, [firstName, lastName]);
 
 
   const openCameraPicker = () => {
@@ -137,28 +145,45 @@ export default function Profile({ navigation, route }) {
     setNameInitials("")
     setAction(false);
   }
+
+const resettingStates = () => {
+  setLoadingActivity(false);
+  setbuttonAbility(false)
+  setButtonTitle((route.params.from == 'profile') ? "Save" : "Next");
+}
+
   const editProfile = async () => {
     setbuttonAbility(true)
     setButtonTitle("Saving...");
-    console.log("picture", picture)
+  
     console.log("picture.length inside edit", picture.length)
     console.log(" nameInitials",  nameInitials)
-    //console.log("picture.length inside edit", picture.length)
+    console.log("userContext.profile.profile_picture", userContext.profile.profile_picture)
    
     
     AsyncStorage.getItem("Accesstoken").then((data) => {
+
       if (data) {
         if (firstName == '') {
+          resettingStates()
           Toast.showWithGravity('Please enter first name!', Toast.LONG, Toast.BOTTOM);
         } else if (lastName == '') {
+          resettingStates()
           Toast.showWithGravity('Please enter last name!', Toast.LONG, Toast.BOTTOM);
+          resettingStates()
         } else if (email == '') {
+          resettingStates()
           Toast.showWithGravity('Please enter email address!', Toast.LONG, Toast.BOTTOM);
-        } else if (reg.test(email) === false) {
+        } else if (reg.test(email.trim()) === false) {
+          resettingStates()
           Toast.showWithGravity('Please enter valid email address', Toast.LONG, Toast.BOTTOM);
-        } else if (picture === null || picture === "" && nameInitials=="") {
+        } 
+        
+        else if (picture === null || picture === "" && nameInitials=="") {
           Toast.showWithGravity('Please upload profile picture', Toast.LONG, Toast.BOTTOM);
-        } else {
+          resettingStates()
+        } 
+        else {
           setLoadingActivity(true)
           let temp_data = {
             email,
@@ -176,13 +201,16 @@ export default function Profile({ navigation, route }) {
 
 
           }
-          if (picture.length > 20) {
-            temp_data['profile_picture'] = userContext.profile.profile_picture
-          }
-
+          
+         
           if(nameInitials != ""){
             temp_data['profile_picture'] = null
           }
+          if (picture.length > 20) {
+            temp_data['profile_picture'] = picture
+          }
+
+          
           
           if (route.params.from == 'profile') {
             console.log("temp_data",temp_data)
@@ -215,6 +243,10 @@ export default function Profile({ navigation, route }) {
         
         setData(data.createUserProfile)
 
+      }else{
+        setLoadingActivity(false);
+        setbuttonAbility(false)
+        setButtonTitle((route.params.from == 'profile') ? "Save" : "Next");
       }
     },
     onError(error, operation) {
@@ -239,6 +271,10 @@ export default function Profile({ navigation, route }) {
       if (data) {
         console.log("*********",data,"***********")
         setEditData(data.editUserProfile)
+      }else{
+        setLoadingActivity(false);
+        setbuttonAbility(false)
+        setButtonTitle((route.params.from == 'profile') ? "Save" : "Next");
       }
     },
     onError(error, operation) {
@@ -323,9 +359,9 @@ export default function Profile({ navigation, route }) {
             value={lastName}
           />
 
-
+{/* 
           <TouchableOpacity onPress={() => setDatePicker(!showDatePicker)} style={[{ flexDirection: 'row', minHeight: 45, alignItems: 'center', borderWidth: 1, borderColor: "#C0C0C0", borderRadius: 2, marginVertical: 10, justifyContent: 'center' }]}>
-            {/* <RegularText style={{fontSize:15,color:'gray',paddingBottom:7}}>{(props.label)}</RegularText> */}
+          
             <View style={{ width: 50, minHeight: 45, backgroundColor: '#feeed9', alignItems: 'center', justifyContent: 'center' }}>
               <Image source={require("../assets/Icons/calendar.png")} style={{ width: 20, height: 20, justifyContent: 'flex-end', position: 'absolute', right: 15, resizeMode: 'contain' }} />
             </View>
@@ -334,9 +370,9 @@ export default function Profile({ navigation, route }) {
 
             </View>
 
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
-          <DateTimePickerModal
+          {/* <DateTimePickerModal
             isVisible={showDatePicker}
             maximumDate={new Date()}
             mode="date"
@@ -358,7 +394,7 @@ export default function Profile({ navigation, route }) {
               // setTime(currentDate);
             }}
             onCancel={() => setDatePicker(false)}
-          />
+          /> */}
           <Input
             placeholder={'Email'}
             image={require('../assets/Icons/mail.png')}

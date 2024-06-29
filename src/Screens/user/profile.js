@@ -298,7 +298,7 @@ export default function profile({ route, navigation }) {
 
                 <View style={{flex:1, alignItems:'center', paddingTop:10, justifyContent:'center'}}>
                     <RegularText>{userContext.profile.first_name} {userContext.profile.last_name}</RegularText>
-                    <RegularText>Age: {userContext.profile.age}</RegularText>
+                    {/* <RegularText>Age: {userContext.profile.age}</RegularText> */}
                     <RegularText style={{textAlign:'center'}}>Location: {userContext.profile.city}, {stateList[userContext.profile.state].label}</RegularText>
                 </View>
                  <View style={{alignItems:"center",flexDirection:"row",justifyContent:"center", marginVertical:20}}>
