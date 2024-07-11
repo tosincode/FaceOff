@@ -122,7 +122,7 @@ export default function UserProfile({ route, navigation }) {
                             {
                                 userProfileData.profile_picture !== null ?
                                     <Image
-                                        source={{ uri: 'http://34.207.73.58:3002/' + userProfileData.profile_picture }}
+                                        source={{ uri: 'https://faceoff24.com/' + userProfileData.profile_picture }}
                                         style={styles.imageStyle}
                                     />
                                     :

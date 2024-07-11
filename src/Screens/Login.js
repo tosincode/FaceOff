@@ -68,7 +68,10 @@ function Login({ navigation }) {
 
   const [callLogin] = useMutation(LOGIN_MUTATION,{
 
+
+
     onCompleted(data) {
+
       if (data) {
         console.log('login response data is', data);
         setLoadingActivity(false);
@@ -77,6 +80,7 @@ function Login({ navigation }) {
       }
     },
     onError(error, operation) {
+      console.log(LOGIN_MUTATION)
       console.log(JSON.stringify(error))
       console.log("OP",JSON.stringify(operation))
       console.log(form, 'form');

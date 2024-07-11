@@ -80,7 +80,7 @@ export default function Profile({ navigation, route }) {
       if (route.params.from == 'profile') {
           console.log("fromPfrofile",userContext.profile)
         if(userContext.profile.profile_picture){
-          setPicture('http://34.207.73.58:3002/' + userContext.profile.profile_picture)
+          setPicture('https://faceoff24.com/' + userContext.profile.profile_picture)
         }
         
         setFirstName(userContext.profile.first_name)

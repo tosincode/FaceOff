@@ -143,7 +143,7 @@ const uploadVideo = async () => {
 
         if (userData && userData.usersList) {
             modifyUserArray(userData.usersList)
-        }
+    }
     }, [userData, userError]);
 
     const modifyUserArray = data => {
@@ -229,7 +229,7 @@ const uploadVideo = async () => {
     }
 
     const create_topics = async () => {
-        console.log("video",)
+        console.log(video, "create topic video")
         if (claim === null || claim === "") {
             Toast.showWithGravity('Please enter claim topic', Toast.LONG, Toast.BOTTOM);
         } else if (category === null || category === "") {
@@ -406,7 +406,8 @@ const uploadVideo = async () => {
                         alignItems: 'center', 
                         backgroundColor: Constants.btnColor, 
                         marginTop: 15, 
-                        borderRadius: 15, 
+                        borderRadius: 15,
+                        marginRight:5, 
                         paddingVertical: 10, // Adjust as needed for padding top and bottom
                         paddingHorizontal: 15  // Adjust as needed for padding left and right
                         

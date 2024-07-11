@@ -14,13 +14,9 @@ import { ThemeContext } from '../utils/screenModes/ThemeContext';
 let userId = '';
 export default function VideoTile({ item, commentPress, onPress, firstItem, votePressFavour, votePressAgainst, report, claimPress, userProfilePress, againstUserProfilePress, page, pageSize, claim, feedType, isCategory }) {
 
-  
+    console.log("item", item)
 
-//    const favourPercentage = item.totalVotes ? Math.round((item.totalFavourVotes / item.totalVotes) * 100) : 0;
-//    const againstPercentage = item.totalVotes ?  Math.round((item.totalAgainstVotes / item.totalVotes) * 100) : 0;
-  
-//    const favourPercentage = item.totalVotes ? Math.round((item.totalFavourVotes / item.totalVotes) * 100) : 0;
-//    const againstPercentage = item.totalVotes ? Math.round((item.totalAgainstVotes / item.totalVotes) * 100) : 0;
+
 
    const totalFavourVotes = Number(item.totalFavourVotes) || 0;
    const totalAgainstVotes = Number(item.totalAgainstVotes) || 0;
@@ -30,7 +26,7 @@ export default function VideoTile({ item, commentPress, onPress, firstItem, vote
    const againstPercentage = totalVotes ? Math.round((totalAgainstVotes / totalVotes) * 100) : 0;
 
 
-   //console.log("feeds item",item )
+console.log("feeds item",item.totalFavourVotes )
 
     const { theme, toggleTheme } = useContext(ThemeContext);
 
@@ -115,10 +111,10 @@ export default function VideoTile({ item, commentPress, onPress, firstItem, vote
                <View style={{ width: 40, height: 40, borderRadius: 20, overflow: 'hidden', backgroundColor: '#dddddd50', justifyContent: 'center', alignItems: 'center', borderColor: Constants.btnColor, borderWidth: !item.profile_picture ? 1 : 0 }}>
                 {item.profile_picture ?
                     <FastImage
-                        //  source={item.profile_picture?{uri:'http://34.207.73.58:3002/'+item.profile_picture}:require('../assets/Icons/thumb.png')} 
+                        //  source={item.profile_picture?{uri:'https://faceoff24.com/'+item.profile_picture}:require('../assets/Icons/thumb.png')} 
                         style={{ width: 40, height: 40, borderRadius: 20, overflow: 'hidden', resizeMode: 'cover' }}
                         source={{
-                            uri: 'http://34.207.73.58:3002/' + item.profile_picture,
+                            uri: 'https://faceoff24.com/' + item.profile_picture,
                             headers: { Authorization: 'someAuthToken' },
                             priority: FastImage.priority.high,
                         }}
@@ -139,10 +135,10 @@ export default function VideoTile({ item, commentPress, onPress, firstItem, vote
             <View style={{ width: 40, height: 40, borderRadius: 20, overflow: 'hidden', backgroundColor: '#dddddd50', justifyContent: 'center', alignItems: 'center', borderColor: Constants.btnColor, borderWidth: !item.profile_picture ? 1 : 0 }}>
                 {item.against_profile_picture ?
                     <FastImage
-                        //  source={item.profile_picture?{uri:'http://34.207.73.58:3002/'+item.profile_picture}:require('../assets/Icons/thumb.png')} 
+                        //  source={item.profile_picture?{uri:'https://faceoff24.com/'+item.profile_picture}:require('../assets/Icons/thumb.png')} 
                         style={{ width: 40, height: 40, borderRadius: 20, overflow: 'hidden', resizeMode: 'cover' }}
                         source={{
-                            uri: 'http://34.207.73.58:3002/' + item.against_profile_picture,
+                            uri: 'https://faceoff24.com/' + item.against_profile_picture,
                             headers: { Authorization: 'someAuthToken' },
                             priority: FastImage.priority.high,
                         }}
@@ -159,8 +155,8 @@ export default function VideoTile({ item, commentPress, onPress, firstItem, vote
         </View>
             
         <View style={{ flexDirection: 'row', height: 200 }}>
-            <ImageBackground source={(item.thumbnail) ? { uri: "http://34.207.73.58:3002/" + item.thumbnail } : ""} resizeMode={"cover"} style={{ flex: 1, height: 200, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity onPress={() => { setUrl(item.video); setThumbnail("http://34.207.73.58:3002/" + item.thumbnail); setVideoType("favour"); setShow(true); }} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ImageBackground source={(item.thumbnail) ? { uri: "https://faceoff24.com/" + item.thumbnail } : ""} resizeMode={"cover"} style={{ flex: 1, height: 200, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => { setUrl(item.video); setThumbnail("https://faceoff24.com/" + item.thumbnail); setVideoType("favour"); setShow(true); }} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Image source={require('../assets/Icons/play-icon.png')} style={{ width: 50, height: 50, resizeMode: 'contain' }} />
 
                 </TouchableOpacity>
@@ -168,8 +164,8 @@ export default function VideoTile({ item, commentPress, onPress, firstItem, vote
 
             {item.against_video ?
 
-                <ImageBackground source={(item.against_video_thumbnail) ? { uri: "http://34.207.73.58:3002/" + item.against_video_thumbnail } : ""} resizeMode={"cover"} style={{ flex: 1, height: 200, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center' }}>
-                    <TouchableOpacity onPress={() => { setUrl(item.against_video); setThumbnail("http://34.207.73.58:3002/" + item.against_video_thumbnail); setVideoType("against"); setShow(true); }} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ImageBackground source={(item.against_video_thumbnail) ? { uri: "https://faceoff24.com/" + item.against_video_thumbnail } : ""} resizeMode={"cover"} style={{ flex: 1, height: 200, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity onPress={() => { setUrl(item.against_video); setThumbnail("https://faceoff24.com/" + item.against_video_thumbnail); setVideoType("against"); setShow(true); }} style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <Image source={require('../assets/Icons/play-icon.png')} style={{ width: 50, height: 50, resizeMode: 'contain' }} />
 
                     </TouchableOpacity>

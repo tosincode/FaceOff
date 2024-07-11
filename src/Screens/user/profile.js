@@ -43,7 +43,7 @@ export default function profile({ route, navigation }) {
     useEffect(()=>{
         console.log("userContext", userContext.profile.profile_picture)
         if(userContext.profile.profile_picture != null){
-            setPicture('http://34.207.73.58:3002/'+userContext.profile.profile_picture)
+            setPicture('https://faceoff24.com/'+userContext.profile.profile_picture)
             console.log("userContext", userContext.profile.profile_picture)
         } else if(userContext.profile){
             let initial = userContext.profile.first_name.charAt(0).toUpperCase() + userContext.profile.last_name.charAt(0).toUpperCase();

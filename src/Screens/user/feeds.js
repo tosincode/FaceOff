@@ -127,7 +127,7 @@ export default function Feeds({ route, navigation }) {
         })
 
         return unsubscribe
-    }, [navigation])
+    }, [navigation, votingType])
 
  
 
@@ -296,16 +296,16 @@ export default function Feeds({ route, navigation }) {
               // console.log("afterVotingfeeds", data)
              // setIsVotedState(!votedState)
              updateFeedById(feedsId,votingType);
-                // feeds({
-                //     variables: {
-                //         // page: page,
-                //         // pageSize: pageSize,
-                //         claim: search,
-                //         isCategory: isCategory,
-                //         sorting_id: 1,
-                //         type: feedType
-                //     }
-                // })
+                feeds({
+                    variables: {
+                        // page: page,
+                        // pageSize: pageSize,
+                        claim: search,
+                        isCategory: isCategory,
+                        sorting_id: 1,
+                        type: feedType
+                    }
+                })
                 Toast.showWithGravity("Voted", Toast.LONG, Toast.BOTTOM);
             }
         },

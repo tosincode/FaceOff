@@ -1,7 +1,8 @@
 # Resolve react_native_pods.rb with node to allow for hoisting
-# use_modular_headers!
+ use_modular_headers!
 
 # pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
+
 
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -9,7 +10,8 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+  #platform :ios, min_ios_version_supported
+platform :ios, '13.0'
 prepare_react_native_project!
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.

@@ -97,7 +97,7 @@ export default function Followers({ navigation, route }) {
                             //  source={item.profile_picture?{uri:'http://3.130.98.232/'+item.profile_picture}:require('../assets/Icons/thumb.png')} 
                             style={{ width: 50, height: 50, borderRadius: 25, overflow: 'hidden', resizeMode: 'cover' }}
                             source={{
-                                uri: 'http://34.207.73.58:3002/' + item.userDetails[0].profile_picture,
+                                uri: 'https://faceoff24.com/' + item.userDetails[0].profile_picture,
                                 headers: { Authorization: 'someAuthToken' },
                                 priority: FastImage.priority.high,
                             }}

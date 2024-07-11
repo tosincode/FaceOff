@@ -146,7 +146,7 @@ export default function VideoTile({ commentPress, claimPress, firstItem, data, w
                         //  source={item.profile_picture?{uri:'http://3.130.98.232/'+item.profile_picture}:require('../assets/Icons/thumb.png')} 
                         style={{ width: 40, height: 40, borderRadius: 20, overflow: 'hidden', resizeMode: 'cover' }}
                         source={{
-                            uri: 'http://34.207.73.58:3002/' + data.profile_picture,
+                            uri: 'https://faceoff24.com/' + data.profile_picture,
                             headers: { Authorization: 'someAuthToken' },
                             priority: FastImage.priority.high,
                         }}
@@ -169,7 +169,7 @@ export default function VideoTile({ commentPress, claimPress, firstItem, data, w
                         //  source={item.profile_picture?{uri:'http://3.130.98.232/'+item.profile_picture}:require('../assets/Icons/thumb.png')} 
                         style={{ width: 40, height: 40, borderRadius: 20, overflow: 'hidden', resizeMode: 'cover' }}
                         source={{
-                            uri: 'http://34.207.73.58:3002/' + data.against_profile_picture,
+                            uri: 'https://faceoff24.com/' + data.against_profile_picture,
                             headers: { Authorization: 'someAuthToken' },
                             priority: FastImage.priority.high,
                         }}
@@ -187,8 +187,8 @@ export default function VideoTile({ commentPress, claimPress, firstItem, data, w
             <View style={{ flexDirection: 'row', height: 200 }}>
                 {data ?
                     data.video?
-                    <ImageBackground source={(data.thumbnail) ? { uri: "http://34.207.73.58:3002/" + data.thumbnail } : ""} resizeMode={"cover"} style={{ flex: 1, height: 200, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => { setUrl(data.video);setThumbnail("http://34.207.73.58:3002/" + data.thumbnail);setShow(true); }} style={{ flex: 1,justifyContent: 'center', alignItems: 'center',zIndex:10 }}>
+                    <ImageBackground source={(data.thumbnail) ? { uri: "https://faceoff24.com/" + data.thumbnail } : ""} resizeMode={"cover"} style={{ flex: 1, height: 200, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={() => { setUrl(data.video);setThumbnail("https://faceoff24.com/" + data.thumbnail);setShow(true); }} style={{ flex: 1,justifyContent: 'center', alignItems: 'center',zIndex:10 }}>
                             <Image source={require('../assets/Icons/play-icon.png')} style={{ width: 50, height: 50, resizeMode: 'contain' }} />
         
                         </TouchableOpacity>
@@ -207,8 +207,8 @@ export default function VideoTile({ commentPress, claimPress, firstItem, data, w
 
                 {data ?
                     data.against_video ?
-                    <ImageBackground source={(data.against_video_thumbnail) ? { uri: "http://34.207.73.58:3002/" + data.against_video_thumbnail } : ""} resizeMode={"cover"} style={{ flex: 1, height: 200, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center' }}>
-                        <TouchableOpacity onPress={() => { setUrl(data.against_video);setThumbnail("http://34.207.73.58:3002/" + data.against_video_thumbnail);setShow(true); }} style={{ flex: 1,justifyContent: 'center', alignItems: 'center', zIndex:10 }}>
+                    <ImageBackground source={(data.against_video_thumbnail) ? { uri: "https://faceoff24.com/" + data.against_video_thumbnail } : ""} resizeMode={"cover"} style={{ flex: 1, height: 200, backgroundColor: '#a1a1a1', justifyContent: 'center', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={() => { setUrl(data.against_video);setThumbnail("https://faceoff24.com/" + data.against_video_thumbnail);setShow(true); }} style={{ flex: 1,justifyContent: 'center', alignItems: 'center', zIndex:10 }}>
                             <Image source={require('../assets/Icons/play-icon.png')} style={{ width: 50, height: 50, resizeMode: 'contain', }} />
         
                         </TouchableOpacity>

@@ -34,7 +34,7 @@ var interval;
 
 const CameraScreen = ({ navigation, from }) => {
 
-  const [videoURI, setVideoURI] = useState('');
+  // const [videoURI, setVideoURI] = useState('');
   const [timeCounter, setTimeCounter] = useState("00:00");
   const [flash, setFlash] = useState('off');
   const [zoom, setZoom] = useState(0);
@@ -55,6 +55,7 @@ const CameraScreen = ({ navigation, from }) => {
   const [isUploaded, setIsUpLoaded] =  useState(false)
 
   const [isUploadedLoded, setIsUpLoadedLoaded] =  useState(false)
+  const [uploadVideoUrl, setVideoUploadUrl] = useState("")
 
   const screenModeStyles = theme === 'light' ? lightTheme : darkTheme;
   const cameraRef = useRef(null);
@@ -135,7 +136,7 @@ const CameraScreen = ({ navigation, from }) => {
   
       promise.then((data) => {
         console.log("data.uri", data.uri)
-        setVideoURI(data.uri);
+      //  setVideoURI(data.uri);
         setVideoUrl(data.uri);
         setIsRecording(false);
         if (route.params.from === "feeds" || route.params.from === "archives" || route.params.from === "notificationFeed") {
@@ -190,20 +191,21 @@ const CameraScreen = ({ navigation, from }) => {
   setButtonAbility(true)
     if(route.params.from=="feeds" || route.params.from == "notificationFeed"){
       setLoadingActivity(true);
-      console.log("videoUrl noow", videoUrl)
+     // console.log( videoUrl, "videoUrl noow")
       if(isUploaded){
-            console.log("got it here")
-          const video = `data:video/mp4;base64,${videoUrl}`;
+            console.log(videoUrl,"got it here")
+       //   const video = `data:video/mp4;base64,${videoUrl}`;
           againstVideo({variables:{
             againstVideoInput:{
               topic_id:Number(route.params.topic_id),
-              video:video
+              video:uploadVideoUrl
             }
           }})
       }else{
         const filepath = videoUrl.split('//')[1];
         const videoUriBase64 = await RNFS.readFile(filepath, 'base64');
         const video = `data:video/mp4;base64,${videoUriBase64}`;
+        console.log(video, "vidoo recordimg")
         againstVideo({variables:{
           againstVideoInput:{
             topic_id:Number(route.params.topic_id),
@@ -359,11 +361,11 @@ const CameraScreen = ({ navigation, from }) => {
       })
       .then(response => setThumbnail(response.path))
       .catch(err => console.log({ err }));
-      setVideoURI(getvideoUri);
+     // setVideoURI(getvideoUri);
       setVideoUrl(getvideoUri);
       setIsRecording(false);
       setShowpreview(true)
-    // setVideoUrl(`data:video/mp4;base64,${videoUriBase64}`);
+      setVideoUploadUrl(`data:video/mp4;base64,${videoUriBase64}`);
  
     setIsUpLoadedLoaded(false);
     } catch (error) {

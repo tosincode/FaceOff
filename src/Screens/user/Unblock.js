@@ -100,7 +100,7 @@ export default function Unblock({ navigation }) {
                             //  source={item.profile_picture?{uri:'http://3.130.98.232/'+item.profile_picture}:require('../assets/Icons/thumb.png')} 
                             style={{ width: 40, height: 40, borderRadius: 20, overflow: 'hidden', resizeMode: 'cover' }}
                             source={{
-                                uri: 'http://34.207.73.58:3002/' + item.profile_picture,
+                                uri: 'https://faceoff24.com/' + item.profile_picture,
                                 headers: { Authorization: 'someAuthToken' },
                                 priority: FastImage.priority.high,
                             }}

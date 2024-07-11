@@ -27,10 +27,12 @@ import {ApolloProvider} from '@apollo/react-hooks';
 //   });
 
 const httpLink = createHttpLink({
-    uri: `http://34.207.73.58:3002/graphql`
+    uri: `https://faceoff24.com/graphql`
   });
 
- // http://34.207.73.58:3002/graphql
+
+ 
+ // https://faceoff24.com/graphql
 
   let tokenExpiry = null;
 let refreshTokenExpiry = null;

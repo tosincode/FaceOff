@@ -654,7 +654,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = iside/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FaceOff;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -686,7 +686,7 @@
 				DEVELOPMENT_TEAM = MR77RF62BM;
 				INFOPLIST_FILE = iside/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = FaceOff;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
