@@ -14,7 +14,7 @@ import { ThemeContext } from '../utils/screenModes/ThemeContext';
 let userId = '';
 export default function VideoTile({ item, commentPress, onPress, firstItem, votePressFavour, votePressAgainst, report, claimPress, userProfilePress, againstUserProfilePress, page, pageSize, claim, feedType, isCategory }) {
 
-    console.log("item", item)
+    console.log("item =>", item)
 
 
 
@@ -102,7 +102,7 @@ console.log("feeds item",item.totalFavourVotes )
         </View>
         
         
-        <View style={{ flex: 1, flexDirection: 'row', paddingBottom:10, marginBottom:5, borderBottomColor: '#ddd', borderBottomWidth: 1 }}>
+        <View style={{ flex: 1, flexDirection: 'row', paddingBottom:10, marginBottom:5}}>
        
             <RegularText style={{ fontSize: 12 }}>Posted: {calcDays(item.created_at)}</RegularText>
         </View>

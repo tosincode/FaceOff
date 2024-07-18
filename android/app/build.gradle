@@ -79,7 +79,7 @@ android {
         applicationId "com.faceOff"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 16
+        versionCode 19
         versionName "1.1"
         missingDimensionStrategy 'react-native-camera', 'general'
 
@@ -92,6 +92,12 @@ android {
             keyPassword 'android'
         }
     }
+
+    //   lintOptions {
+    //     baseline file("lint-baseline.xml")
+    //     abortOnError false
+    //     warningsAsErrors false
+    // }
       signingConfigs {
 
      release {

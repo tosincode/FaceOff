@@ -14,7 +14,8 @@ import configureStore from './store/ConfigureStore';
 import FlashMessage, {showMessage} from 'react-native-flash-message';
 import { ThemeProvider } from './src/utils/screenModes/ThemeContext';
 import notifee from '@notifee/react-native';
-
+import VersionCheck from 'react-native-version-check';
+import RNInAppUpdate, { IAUUpdateKind } from 'react-native-rn-in-app-update';
 
 
 // import {
@@ -26,12 +27,13 @@ import notifee from '@notifee/react-native';
 //   View,
 // } from 'react-native';
 
-import { StyleSheet, Text, View, SafeAreaView, StatusBar, Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, View, SafeAreaView, StatusBar, Modal, Linking } from 'react-native';
 
 import Routes from './Router';
 import {
   NotificationListner,
   requestPushNotificationPermission } from './src/utils/PushNotificationHelper'
+import { Colors } from './src/Components/Accordian';
 const store = configureStore();
 export const UserContext = React.createContext({
   profile: {},
@@ -158,12 +160,58 @@ useEffect(() => {
 // NotificationListner();
 // }, []);
 
+const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
+const [updateInfo, setUpdateInfo] = useState(null);
 
+useEffect(() => {
+  checkForUpdate();
+}, []);
+
+const checkForUpdate = async () => {
+  if (Platform.OS === 'android') {
+    const update = await RNInAppUpdate.checkNeedsUpdate();
+    if (update.shouldUpdate) {
+      setUpdateInfo(update);
+      setIsUpdateAvailable(true);
+    }
+  } else {
+    const latestVersion = await VersionCheck.getLatestVersion();
+    const currentVersion = VersionCheck.getCurrentVersion();
+
+
+    if (VersionCheck.needUpdate({ currentVersion, latestVersion }).isNeeded) {
+      setIsUpdateAvailable(true);
+    }
+  }
+};
+
+const handleUpdate = async () => {
+  console.log("updateInfo", Platform.OS)
+  if (Platform.OS === 'android' && updateInfo) {
+    RNInAppUpdate.startUpdate({
+      updateType: IAUUpdateKind.IMMEDIATE,
+    });
+  } else {
+    const url = await VersionCheck.getStoreUrl();
+    Linking.openURL(url);
+  }
+  setIsUpdateAvailable(false);
+};
 
 
   return (
    
     <Provider store={store}>
+        <Modal visible={isUpdateAvailable} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text>An update is available!</Text>
+            <TouchableOpacity style={styles.button} onPress={handleUpdate}>
+              <Text style={styles.buttonText}>Install Update</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <UserProvider value={state}>
         <MenuProvider>
           <FlashMessage position="top"/>
@@ -180,5 +228,35 @@ useEffect(() => {
 
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  button: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#fdac41",
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+  },
+});
 
 // export default App;

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, useEffect, useLayoutEffect, useRef } from 'react';
 import { View, StyleSheet, ScrollView, Image, TouchableOpacity, TextInput, Dimensions, FlatList } from 'react-native';
 import { Menu, MenuOptions, MenuOption, MenuTrigger, } from 'react-native-popup-menu';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/react-hooks';
@@ -17,6 +17,8 @@ import {ThemeProvider, useIsFocused} from '@react-navigation/native';
 import MyCustomPauseIcon from '../../assets/Icons/MyCustomPauseIcon';
 import { ThemeContext } from '../../utils/screenModes/ThemeContext';
 import { darkTheme, lightTheme } from '../../utils/screenModes/theme';
+
+
 
 
 export default function Feeds({ route, navigation }) {
@@ -41,6 +43,7 @@ export default function Feeds({ route, navigation }) {
     const isFocused = useIsFocused();
 
 
+
     const updateFeedById = (id, newVotingTypeFlag) => {
         // Clone the initialFeeds array
         const updatedFeeds = initialFeeds.map(feed => {
@@ -49,12 +52,19 @@ export default function Feeds({ route, navigation }) {
             // Determine the voting_type based on newVotingTypeFlag
             const newVotingType = newVotingTypeFlag === 0 ? "Against" : "Favour";
       
-            // Return an updated object with new voting_type_flag and voting_type
-            return { 
-              ...feed, 
-              voting_type_flag: newVotingTypeFlag,
-              voting_type: newVotingType
-            };
+            // Update the votes count based on the newVotingTypeFlag
+            let updatedFeed = { ...feed, voting_type_flag: newVotingTypeFlag, voting_type: newVotingType };
+      
+            if (newVotingTypeFlag === 0) {
+              updatedFeed.totalAgainstVotes = parseInt(feed.totalAgainstVotes, 10) + 1;
+            } else {
+              updatedFeed.totalFavourVotes = parseInt(feed.totalFavourVotes, 10) + 1;
+            }
+      
+            updatedFeed.totalVotes = parseInt(feed.totalVotes, 10) + 1;
+      
+            // Return the updated feed object
+            return updatedFeed;
           }
           // Return the feed as is if not the one to update
           return feed;
@@ -63,6 +73,30 @@ export default function Feeds({ route, navigation }) {
         // Update the state with the modified array
         setInitialFeeds(updatedFeeds);
       };
+
+      
+    // const updateFeedById = (id, newVotingTypeFlag) => {
+    //     // Clone the initialFeeds array
+    //     const updatedFeeds = initialFeeds.map(feed => {
+    //       // Check if this is the feed to update
+    //       if (feed.id === id) {
+    //         // Determine the voting_type based on newVotingTypeFlag
+    //         const newVotingType = newVotingTypeFlag === 0 ? "Against" : "Favour";
+      
+    //         // Return an updated object with new voting_type_flag and voting_type
+    //         return { 
+    //           ...feed, 
+    //           voting_type_flag: newVotingTypeFlag,
+    //           voting_type: newVotingType
+    //         };
+    //       }
+    //       // Return the feed as is if not the one to update
+    //       return feed;
+    //     });
+      
+    //     // Update the state with the modified array
+    //     setInitialFeeds(updatedFeeds);
+    //   };
       
       
       
