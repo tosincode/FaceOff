@@ -93,7 +93,7 @@ export default function Login({ navigation, route }) {
       Toast.showWithGravity("Please enter passcode", Toast.LONG, Toast.BOTTOM);
     } else {
       setLoadingActivity(true)
-       console.log("uniqueId", uniqueId)
+       console.log("fcmToken", fcmToken)
 
       try {
         console.log(" i tried try")
@@ -148,31 +148,13 @@ export default function Login({ navigation, route }) {
     },
   });
 
-  // useEffect(() => {
-  //   const keyboardDidShowListener = Keyboard.addListener(
-  //     'keyboardDidShow',
-  //     () => {
-  //       setKeyboardVisible(true); // or some other action
-  //     }
-  //   );
-  //   const keyboardDidHideListener = Keyboard.addListener(
-  //     'keyboardDidHide',
-  //     () => {
-  //       setKeyboardVisible(false); // or some other action
-  //     }
-  //   );
-
-  //   return () => {
-  //     keyboardDidHideListener.remove();
-  //     keyboardDidShowListener.remove();
-  //   };
-  // }, []);
+ 
 
   const getToken = async () => {
     messaging()
       .getToken()
       .then(async token => {
-        await setFcmToken(token)
+         setFcmToken(token)
         console.log('-----------------Token--------------', token);
         AsyncStorage.setItem('fcm_token', token);
       });

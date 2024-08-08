@@ -116,20 +116,20 @@ const CameraScreen = ({ navigation, from }) => {
     if (isRecording && cameraRef.current) {
       await cameraRef.current.stopRecording();
       setIsRecording(false);
-      setCountdownTime(21); // Reset the countdown time for the next recording
+      setCountdownTime(25); // Reset the countdown time for the next recording
       setTimeCounter("00:00"); // Set the time display to "00:00" when stopped
     }
   };
 
   const takeVideo = async () => {
     if (cameraRef.current && !isRecording) {
-      setCountdownTime(20); // Reset the countdown time to 20 seconds
-      setTimeCounter("00:20"); // Set the initial display to "00:20"
+      setCountdownTime(24); // Reset the countdown time to 20 seconds
+      setTimeCounter("00:24"); // Set the initial display to "00:20"
       setIsRecording(true);
   
       const promise = cameraRef.current.recordAsync({
         mute: false,
-        maxDuration: 20,
+        maxDuration: 24,
         videoBitrate: 2 * 1024 * 1024,
         // quality: RNCamera.Constants.VideoQuality['480p'], // Uncomment and adjust if needed
       });
@@ -313,7 +313,7 @@ const CameraScreen = ({ navigation, from }) => {
 
        console.log("durationInSeconds", durationInSeconds)
 
-        if (durationInSeconds <= 20 ) {
+        if (durationInSeconds <= 24) {
             console.log("res[0].uri", res[0].uri)
             // setVideoUrl(res[0].uri)
             // setShow(true)
@@ -325,7 +325,7 @@ const CameraScreen = ({ navigation, from }) => {
           setIsUpLoadedLoaded(false)
           // Display an error message if the video exceeds the size or duration limit
           Toast.showWithGravity(
-            'Video duration or size cannot exceed 20 seconds',
+            'Video duration or size cannot exceed 24 seconds',
             Toast.LONG,
             Toast.BOTTOM
           );
