@@ -67,7 +67,7 @@ const uploadVideo = async () => {
 
        console.log("durationInSeconds", durationInSeconds)
 
-        if (durationInSeconds <= 20 ) {
+        if (durationInSeconds <= 24 ) {
             console.log("res[0].uri", res[0].uri)
             setVideoUrl(res[0].uri);
             setLoadingActivity(true);
@@ -75,7 +75,7 @@ const uploadVideo = async () => {
         } else {
           // Display an error message if the video exceeds the size or duration limit
           Toast.showWithGravity(
-            'Video duration or size cannot exceed 20 seconds',
+            'Video duration or size cannot exceed 24 seconds',
             Toast.LONG,
             Toast.BOTTOM
           );
